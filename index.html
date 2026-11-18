@@ -1,0 +1,959 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>理系×公認会計士 受験生ポータル（完全中立・登録不要）</title>
+
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+      background-color: #f4f7f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: #1e3a8a;
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #3b82f6;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #1e3a8a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      font-size: 1.25rem;
+    }
+
+    .calc-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      width: 120px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .result-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 12px;
+    }
+
+    .url-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .url-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .url-list a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    .url-list a:hover {
+      text-decoration: underline;
+    }
+
+    /* 共通タグ */
+    .tag {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 5px 12px;
+      border: 1px solid;
+      border-radius: 6px;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+
+    /* 公式一次情報 */
+    .tag-official {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #93c5fd;
+    }
+
+    /* 協会公式 */
+    .tag-association {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #6ee7b7;
+    }
+
+    /* 資格予備校 */
+    .tag-school {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #c4b5fd;
+    }
+
+    /* Big4監査法人 */
+    .tag-audit {
+      background: #e6fffb;
+      color: #0f766e;
+      border-color: #5eead4;
+    }
+
+    /* 現在開発中 */
+    .tag-development {
+      background: #f1f5f9;
+      color: #475569;
+      border-color: #cbd5e1;
+    }
+
+    /* URLの説明ラベル：枠なし */
+    .url-label {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #64748b;
+      margin-right: 6px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>公認会計士試験受験生向けポータル(超プロトタイプ版)</h1>
+      <span class="badge">登録不要のただの情報掲載だけを目的としたサイトです。</span>
+    </header>
+
+    <!-- 試験年度判定ツール -->
+    <div class="card">
+      <h2>📅 次の公認会計士試験「令和◯年度」判定ツール</h2>
+
+      <p>
+        西暦・月・試験の種類を入力すると、
+        該当する公認会計士試験の年度を自動計算します。
+      </p>
+
+      <div class="calc-box">
+        <label for="yearInput">西暦：</label>
+        <input type="number" id="yearInput" value="2026" min="2019" max="2050">
+        <span>年</span>
+
+        <label for="monthInput">月：</label>
+        <input type="number" id="monthInput" value="12" min="1" max="12">
+        <span>月</span>
+
+        <label for="examType">試験の種類：</label>
+        <select id="examType">
+          <option value="short">短答式試験</option>
+          <option value="essay">論文式試験</option>
+        </select>
+
+        <button onclick="calculateReiwa()">年度を判定する</button>
+      </div>
+
+      <div id="result" class="result-box"></div>
+    </div>
+
+    
+    <!-- 試験当日の持ち物ガイド -->
+    <div class="card">
+
+      <h2>🎒 試験で使える身分証明書・持ち込み可能なもの一覧</h2>
+
+      <p>
+        公認会計士試験当日に必要な身分証明書や、
+        試験で使用できる文房具などについてまとめています。
+      </p>
+
+      <!-- 公式情報URL -->
+      <div style="
+        background: #eff6ff;
+        border-left: 4px solid #2563eb;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 16px 0 24px 0;
+      ">
+
+        <span class="tag tag-official">公式一次情報</span>
+
+        <h3 style="margin-top: 8px; color: #1e3a8a;">
+          🔗 持ち込み可能な道具等の公式情報
+        </h3>
+
+        <p>
+          試験で使用できる文房具や持ち込み可能な物品については、
+          必ず公認会計士・監査審査会の公式情報を確認してください。
+        </p>
+
+        <div style="margin-top: 8px;">
+          <span class="url-label">公式情報URL：</span>
+          <a href="https://www.fsa.go.jp/cpaaob/kouninkaikeishi-shiken/qanda/index.html"
+             target="_blank"
+             rel="noopener noreferrer">
+            公認会計士試験に関するＱ＆Ａ
+          </a>
+        </div>
+
+      </div>
+
+      <!-- 身分証明書・文房具の2カラム -->
+      <div style="
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      ">
+
+        <!-- 左側：身分証明書 -->
+        <div style="
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 10px;
+          padding: 16px;
+        ">
+
+          <h3 style="
+            color: #1e3a8a;
+            font-size: 1.1rem;
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+          ">
+            🪪 身分証明書一覧
+          </h3>
+
+          <p style="font-size: 0.9rem; color: #64748b;">
+            試験当日の本人確認に関する情報
+          </p>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>① 運転免許証</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>② マイナンバーカード</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>③ パスポート</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>④ 学生証</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑤ 社員証</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑥ 障がい者手帳</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑦ 在留カード</strong>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑧ 特別永住者証明書</strong>
+          </div>
+
+        </div>
+
+        <!-- 右側：文房具 -->
+        <div style="
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 10px;
+          padding: 16px;
+        ">
+
+          <h3 style="
+            color: #1e3a8a;
+            font-size: 1.1rem;
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+          ">
+            ✏️ 持ち込み可能な文房具など
+          </h3>
+
+          <p style="font-size: 0.9rem; color: #64748b;">
+            試験中に使用できる文房具などの情報
+          </p>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>① シャープペンシル</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              BまたはHBの黒色の物のみです。
+            </p>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>② 鉛筆</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              BまたはHBの黒色の物のみです。
+            </p>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>③ 電卓</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              電源内蔵式で音が出ない、計算機能のみの小型普通電卓のみ可。
+            </p>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>④ ボールペン</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              黒インクのみ使用可です。一つのボールペンに黒以外がセットの物は使用できます。消せるボールペンは使用不可です。
+            </p>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑤ 消しゴム</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              プラスチック製消しゴムのみ使用可。
+            </p>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑥ 飲料水</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              ペットボトル入りの物に限り、試験中に飲めます。詳しくは公式サイトのQ&Aをチェック。
+            </p>
+          </div>
+
+          <div style="
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+          ">
+            <strong>⑦ ポケットティッシュ</strong>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">
+              ポケットティッシュを試験中に机の上に出しておくことが可能です。但し、袋から出した状態にする必要があります。
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 注意事項 -->
+      <div style="
+        background: #fff7ed;
+        border-left: 4px solid #f97316;
+        padding: 14px;
+        border-radius: 6px;
+        margin-top: 20px;
+      ">
+
+        <strong style="color: #9a3412;">
+          ⚠️ 試験当日の注意事項
+        </strong>
+
+        <p style="
+          color: #9a3412;
+          font-size: 0.9rem;
+          margin-bottom: 0;
+        ">
+          身分証明書や文房具の使用条件は、試験年度によって変更される可能性があります。
+          必ず最新の公式案内を確認してください。
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- URL一覧 -->
+    <div class="card">
+      <h2>🔗 公式URLまとめ</h2>
+
+      <p>
+        広告誘導なし。受験生が本当に必要な一次情報だけをまとめています。
+      </p>
+
+      <ul class="url-list">
+
+        <!-- 公式一次情報 -->
+        <li>
+          <span class="tag tag-official">公式一次情報</span>
+
+          <div>
+            <strong>公認会計士・監査審査会（金融庁）</strong>
+          </div>
+
+          <div>
+            (1)公式サイトトップはこちら。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトトップURL：</span>
+            <a href="https://www.fsa.go.jp/cpaaob/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.fsa.go.jp/cpaaob/
+            </a>
+          </div>
+
+          <div style="margin-top: 24px;">
+            (2)マイページログインはこちらから。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">マイページログインURL：</span>
+            <a href="https://www.kaikeishi-shiken.fsa.go.jp/fj0290"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.kaikeishi-shiken.fsa.go.jp/fj0290
+            </a>
+          </div>
+
+          <div style="margin-top: 24px;">
+            (3)試験実施情報(日程, お知らせなど)はこちら。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">試験実施情報URL：</span>
+            <a href="https://www.fsa.go.jp/cpaaob/kouninkaikeishi-shiken/information.html"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.fsa.go.jp/cpaaob/kouninkaikeishi-shiken/information.html
+            </a>
+          </div>
+        </li>
+
+        <!-- 協会公式 -->
+        <li>
+          <span class="tag tag-association">協会公式</span>
+
+          <div>
+            <strong>日本公認会計士協会（JICPA）</strong>
+          </div>
+
+          <div>
+            会計士の仕事内容やキャリア、最新の業界動向を知りたいときに。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://jicpa.or.jp/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://jicpa.or.jp/
+            </a>
+          </div>
+        </li>
+
+        <!-- 資格予備校 -->
+        <li>
+          <span class="tag tag-school">各予備校の公式サイト</span>
+
+          <div>
+            <strong>1.TAC予備校</strong>
+          </div>
+
+          <div>
+            (1)資格の学校TACの公認会計士講座の公式サイトトップです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトトップURL：</span>
+            <a href="https://www.tac-school.co.jp/kouza_kaikei.html"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.tac-school.co.jp/kouza_kaikei.html
+            </a>
+          </div>
+
+          <div style="margin-top: 8px;">
+            (2)TACwebschoolマイページログインはこちら。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">TAC webschoolマイページログインURL：</span>
+            <a href="https://ws.tac-school.co.jp/user_login"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://ws.tac-school.co.jp/user_login
+            </a>
+          </div>
+          <div>
+            <strong>2.CPA会計学院</strong>
+          </div>
+
+          <div>
+            (1)CPA会計学院の公認会計士講座の公式サイトトップです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトトップURL：</span>
+            <a href="https://cpa-net.jp/course/cpa/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://cpa-net.jp/course/cpa/
+            </a>
+          </div>
+
+          <div style="margin-top: 8px;">
+            (2)CPA会計学院マイページログインはこちら(短縮URLを使用していますので、ご注意ください)。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">CPA会計学院マイページログインURL：</span>
+            <a href="https://x.gd/JmS1L"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://x.gd/JmS1L
+            </a>
+          </div>
+
+          <div style="margin-top: 24px">
+            <strong>3.資格の大原</strong>
+          </div>
+
+          <div>
+            (1)資格の大原の社会人講座のサイトです。専門学校はまた別です。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://www.o-hara.jp/course/kaikeishi"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.o-hara.jp/course/kaikeishi
+            </a>
+          </div>
+
+          <div style="margin-top: 8px;">
+            (2)大原合格webログインはこちら。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">大原合格webログインURL：</span>
+            <a href="https://goukakuweb3.o-hara.ac.jp/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://goukakuweb3.o-hara.ac.jp/
+            </a>
+          </div>
+
+          <div style="margin-top : 24px;">
+            <strong>4.LEC（東京リーガルマインド）</strong>
+          </div>
+
+          <div>
+            (1)LEC東京リーガルマインドの公認会計士講座のサイトトップです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトトップURL：</span>
+            <a href="https://www.lec-jp.com/kaikeishi/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.lec-jp.com/kaikeishi/
+            </a>
+          </div>
+
+          <div style="margin-top : 8px">
+            (2)LEC東京リーガルマインドの公認会計士講座Myページログインはこちら。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">MyページログインURL：</span>
+            <a href="https://online.lec-jp.com/member/CSfLogin.jsp?autoLogin"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://online.lec-jp.com/member/CSfLogin.jsp?autoLogin
+            </a>
+          </div>
+
+          <div style="margin-top : 24px;">
+            <strong>5.資格★合格クレアール</strong>
+          </div>
+
+          <div>
+            (1)資格★合格クレアールの公認会計士講座のサイトです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://www.crear-ac.co.jp/cpa/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.crear-ac.co.jp/cpa/
+            </a>
+          </div>
+
+          <div style="margin-top : 8px;">
+            (2)資格★合格クレアール受講生ポータルサイト。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">受講生ポータルサイトURL：</span>
+            <a href="https://www.crear-ac.co.jp/member-info/"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.crear-ac.co.jp/member-info/
+            </a>
+          </div>
+        </li>
+
+        <!-- Big4監査法人 -->
+        <li>
+          <span class="tag tag-audit">Big4監査法人の公式サイト</span>
+
+          <div>
+            <strong>1.有限責任監査法人トーマツ（デロイトトーマツ）</strong>
+          </div>
+
+          <div>
+            有限責任監査法人トーマツの公式サイトです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://www.deloitte.com/jp/ja/about/group/deloitte-touche-tohmatsu.html"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.deloitte.com/jp/ja/about/group/deloitte-touche-tohmatsu.html
+            </a>
+          </div>
+
+          <div>
+            <strong>2.EY新日本有限責任監査法人</strong>
+          </div>
+
+          <div>
+            EY新日本有限責任監査法人の公式サイトです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://www.ey.com/ja_jp/about-us/ey-shinnihon-llc"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.ey.com/ja_jp/about-us/ey-shinnihon-llc
+            </a>
+          </div>
+
+          <div>
+            <strong>3.有限責任あずさ監査法人（KPMG）</strong>
+          </div>
+
+          <div>
+            あずさ監査法人の公式サイトです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://kpmg.com/jp/ja/about/azsa/corporate-profile.html"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://kpmg.com/jp/ja/about/azsa/corporate-profile.html
+            </a>
+          </div>
+
+          <div>
+            <strong>4.PwC Japan有限責任監査法人</strong>
+          </div>
+
+          <div>
+            PwC Japan有限責任監査法人の公式サイトです。
+          </div>
+
+          <div style="margin-top: 8px;">
+            <span class="url-label">公式サイトURL：</span>
+            <a href="https://www.pwc.com/jp/ja/about-us/member/assurance.html"
+               target="_blank"
+               rel="noopener noreferrer">
+              https://www.pwc.com/jp/ja/about-us/member/assurance.html
+            </a>
+          </div>
+        </li>
+
+        <!-- 開発中 -->
+        <li>
+          <span class="tag tag-development">現在開発中</span>
+
+          <div>
+            <strong>理系出身合格者の体験談・学習スケジュール例</strong>
+          </div>
+
+          <div>
+            今後、理系ならではの強みや勉強法の記事をここに追加していきます。
+          </div>
+        </li>
+
+      </ul>
+    </div>
+    
+    <!-- ご意見・ご感想 -->
+    <div class="card">
+
+      <h2>💬 ご意見・ご感想</h2>
+
+      <p>
+        当サイトをご利用いただきありがとうございます。
+        サイトをより便利で使いやすいものにするため、
+        皆様からのご意見・ご感想を募集しています。
+      </p>
+
+      <div style="
+        background: #eff6ff;
+        border-left: 4px solid #2563eb;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 16px;
+        text-align: center;
+      ">
+
+        <h3 style="color: #1e3a8a; margin-top: 0;">
+          📩 管理者へのフィードバックはこちら
+        </h3>
+
+        <p style="font-size: 0.95rem;">
+          掲載情報の誤り、追加してほしい機能、
+          サイトへのご感想など、お気軽にお寄せください。
+        </p>
+
+        <a href="https://x.com/ISpoD4axaN23692"
+           target="_blank"
+           rel="noopener noreferrer"
+           style="
+             display: inline-block;
+             background: #1e3a8a;
+             color: white;
+             padding: 12px 24px;
+             border-radius: 8px;
+             text-decoration: none;
+             font-weight: bold;
+             margin-top: 8px;
+           ">
+          X（旧Twitter）で管理者に連絡する
+        </a>
+
+        <p style="
+          font-size: 0.8rem;
+          color: #64748b;
+          margin-bottom: 0;
+          margin-top: 12px;
+        ">
+          ※返信にはお時間をいただく場合があります。
+        </p>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <script>
+    function calculateReiwa() {
+
+      const year = Number(document.getElementById("yearInput").value);
+      const month = Number(document.getElementById("monthInput").value);
+      const examType = document.getElementById("examType").value;
+      const resultDiv = document.getElementById("result");
+
+      // 西暦の入力チェック
+      if (!Number.isInteger(year) || year < 2019 || year > 2050) {
+        resultDiv.textContent = "2019年から2050年までの西暦を入力してください。";
+        return;
+      }
+
+      // 月の入力チェック
+      if (!Number.isInteger(month) || month < 1 || month > 12) {
+        resultDiv.textContent = "1月から12月までの月を入力してください。";
+        return;
+      }
+
+      // 試験の種類と月の組み合わせを確認
+      if (examType === "short" && month !== 5 && month !== 12) {
+        resultDiv.textContent = "短答式試験は5月または12月を選択してください。";
+        return;
+      }
+
+      if (examType === "essay" && month !== 8) {
+        resultDiv.textContent = "論文式試験は8月を選択してください。";
+        return;
+      }
+
+      // 12月の短答式試験は翌年度として扱う
+      let examYear = year;
+
+      if (examType === "short" && month === 12) {
+        examYear = year + 1;
+      }
+
+      // 令和年度を計算
+      const reiwaYear = examYear - 2018;
+      const reiwaText = reiwaYear === 1 ? "令和元" : `令和${reiwaYear}`;
+
+      // 試験名
+      const examName = examType === "short" ? "短答式" : "論文式";
+
+      // 判定結果を表示
+      resultDiv.textContent =
+        `西暦 ${year} 年${month}月に行われる${examName}試験は【 ${reiwaText}年度 】公認会計士試験です。`;
+    }
+
+    // ページ読み込み時の初期設定
+    window.onload = function() {
+
+      const currentDate = new Date();
+
+      // 西暦は現在の年を自動入力
+      document.getElementById("yearInput").value = currentDate.getFullYear();
+
+      // 初期表示は12月の短答式試験
+      document.getElementById("monthInput").value = 12;
+      document.getElementById("examType").value = "short";
+
+      calculateReiwa();
+    };
+  </script>
+
+</body>
+</html>
